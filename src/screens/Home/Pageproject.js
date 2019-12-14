@@ -3,6 +3,7 @@ import { View,SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'rea
 import { Container, Header, Content, Card, CardItem, Thumbnail, Button, Icon, Left, Body, Right, Tabs, Tab, FooterTab, Footer, Item, Input  ,Text, List, ListItem,} from 'native-base';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Axios from 'axios'
 // Imports: Redux Actions
 import { connect } from 'react-redux';
@@ -58,18 +59,13 @@ class Pageproject extends Component {
 
   render() {
     const { project } = this.state;
+    const { goBack } = this.props.navigation;
     if(!project.length) {
       return(
         <Container>
           <Header>
             <Left>
-              <Button
-                onPress = {()=>{this.props.navigation.navigate('AddProject')}}
-              >
-                <Text>
-                  Add Project
-                </Text>
-              </Button>
+    
             </Left>
           </Header>
           <Content>
@@ -85,11 +81,10 @@ class Pageproject extends Component {
     return (
       <Container>
       <View style={styles.container}>
-      <View style={styles.header}>
-          <TouchableOpacity style={styles.create} onPress={() => this.props.navigation.navigate('Project')}>
-              
-          <Icon name='add' /><Text style={{ fontSize: 16, marginLeft: 10 }}>Create</Text>
-          </TouchableOpacity>
+        <View style={styles.header}>
+        <View style={styles.titleBar}>
+        <TouchableOpacity onPress={() => goBack()}><Ionicons name="ios-arrow-back" size={27} color="#52575D"style={{marginTop: 12, marginLeft : 16, marginBottom : 12, color : 'white'}}></Ionicons></TouchableOpacity>
+        </View>
       </View>
       <View style={styles.conten}>
 
@@ -97,17 +92,12 @@ class Pageproject extends Component {
         <Content>
         {
                 project.map((data, index) => (
-          <List style={{backgroundColor : '#ccc', width : 320, height :120, left : 20, borderRadius : 15, marginTop : 20}}>
+          <List style={{backgroundColor : '#ccc', width : 320, height :120, left : 20, borderRadius : 15, marginTop : 20, flex : 1}}>
             <ListItem avatar key={index}>
               {/* <Left>
                 <Thumbnail source={{ uri: 'Image URL' }} />
               </Left> */}
-              <Body>
-                <Text>{data.name}</Text>
-                <Text note>{data.description}</Text>
-                <Text note>{data.price}</Text>
-              </Body>
-              <Right>
+               <Right>
                     {
                         (data.done != '1')?
                           <Button style={{width : 90, height : 30, borderRadius : 10, marginBottom : 10}}     
@@ -119,27 +109,50 @@ class Pageproject extends Component {
                           <Button style={{width : 90, height : 30, borderRadius : 10, marginBottom : 10, backgroundColor : 'green'}}      
                           onPress={() => {this._changeDone(data.id, 0)}}
                         >
-                        <Text>Done</Text>
+                        <Text style={{fontSize : 11, left : 10}}>Done</Text>
                         </Button>
                     }
-                    {
-                      (data.status != '1')?
-                      <Button style={{width : 90, height : 30, borderRadius : 10, backgroundColor : '#ffd700'}}     
-                    >
-                    <Text style={{fontSize : 11, textAlign : 'center', left : 3}}>WAITING..</Text>
-                    </Button>
-                        :
-                        <Button style={{width : 90, height : 30, borderRadius : 10, backgroundColor : 'green'}}     
-                        >
-                        <Text style={{fontSize : 11, textAlign : 'center', left : 3, color : 'white'}}>SUCCESS..</Text>
-                        </Button>
-                    }
+                   
                     </Right>
+              <Body>
+                <Text>{data.name}</Text>
+                <Text >{data.description}</Text>
+                <Text >Rp.{data.price}</Text>
+               
+                {
+                   
+                      (data.status != '1')?
+                      <View style={{flexDirection : 'row'}}>
+                      <Text note>Status :</Text>
+                      <Button style={{width : 70, height : 20, borderRadius : 10, backgroundColor : '#ffd700'}}     
+                    >
+                    <Text style={{fontSize : 9, textAlign : 'center', left : 3, color : 'black'}}>WAITING</Text>
+                    </Button>
+                    </View>
+                        :
+                        <View style={{flexDirection : 'row'}}>
+                           <Text note>Status :</Text>
+                        <Button style={{width : 70, height : 20, borderRadius : 10, backgroundColor : 'green'}}    
+                        >
+                        <Text style={{fontSize : 8, textAlign : 'center', left : 3, color : 'white'}}>SUCCESS</Text>
+                        </Button>
+                        </View>
+
+                    }
+              </Body>
+             
             </ListItem>
           </List>
                ))
               }
+                
         </Content>
+        <TouchableOpacity
+          style={styles.floatBtn}
+          onPress={() =>{this.props.navigation.navigate('Project')}}
+        >
+          <Icon name="add"  size={30} color="" style={{color : 'white'}} />
+          </TouchableOpacity>
  
       </View>
   </View>
@@ -166,14 +179,10 @@ class Pageproject extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        
     },
-    header: {
-        height: 50,
-        justifyContent: 'center',
-        paddingLeft: 5,
-        backgroundColor: '#3E51B5'
-    },
+
     create: {
         justifyContent: "center",
         alignItems: 'center',
@@ -185,7 +194,23 @@ const styles = StyleSheet.create({
     },
     conten: {
         flex: 1,
-    }
+    },
+    floatBtn: {
+      borderWidth:1,
+      borderColor:'rgba(0,0,0,0.2)',
+      alignItems:'center',
+      justifyContent:'center',
+      width:60,
+      height:60,
+      position: 'absolute',                                          
+      bottom: 20,                                                    
+      right: 20,
+      backgroundColor:'#3E51B5',
+      borderRadius:100,
+    },
+    titleBar: {
+      backgroundColor : '#3E51B5'
+  },
 })
 const mapStateToProps = (state) => {
   // Redux Store --> Component

@@ -103,6 +103,7 @@ class Pageengineer extends Component {
         <View style={{flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-evenly'}}>
         {
             data.map(product => (
+      
 
           <Card style={styles.card} >
            
@@ -111,7 +112,10 @@ class Pageengineer extends Component {
             <Body>
                   <Text style={{textAlign : 'center'}} >{product.name}</Text>
                   <Text style={{textAlign : 'center'}} >Project : {product.project} </Text>
-                  <Text style={{textAlign : 'center'}}> Done :{product.done} </Text>
+
+                  <Text style={{textAlign : 'center'}}>
+                  {(product.done)?(product.done/product.project*100):'0'}% Rate
+                  </Text>
                   <Button style={{width  : 70, height : 30}} onPress = {() => {this._setIdEngineer(product.created_by)}}>
                
             <Text>View</Text>

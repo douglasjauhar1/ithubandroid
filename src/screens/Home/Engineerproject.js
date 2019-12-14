@@ -109,6 +109,7 @@ class EngineerProject extends React.Component {
                     <Body>
                       <Text>{data.name}</Text>
                       <Text note>{data.id_company}</Text>
+                      <Text note>{data.description}</Text>
                       <Text note>Rp.{data.price}</Text>
                     </Body>
                     <Right>
@@ -117,7 +118,7 @@ class EngineerProject extends React.Component {
                           <Button style={{width : 90, height : 30, borderRadius : 10, marginBottom : 10, backgroundColor : 'yellow'}}      
                             onPress={() => {this._changeStatus(data.id, 1)}}
                           >
-                          <Text style={{fontSize : 12, color : 'black'}}>Decline</Text>
+                          <Text style={{color : 'black'}}>Decline</Text>
                           </Button>
                           :
                           <Button style={{width : 90, height : 30, borderRadius : 10, marginBottom : 10, backgroundColor : 'green'}}     

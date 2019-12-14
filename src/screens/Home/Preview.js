@@ -12,6 +12,7 @@ import { jwt } from '../../../redux/actions/tokenAction'
 import { getEngineer } from '../../../redux/actions/engineerActions'
 import { connect } from 'react-redux';
 import Axios from 'axios'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Button } from 'native-base';
 
 class Preview extends Component {
@@ -42,9 +43,12 @@ class Preview extends Component {
       }
     render() {
         console.log(this.props.id);
+        const { goBack } = this.props.navigation;
         return (
             <View style={styles.container}>
-            <View style={styles.header}></View>
+            <View style={styles.header}>
+            <TouchableOpacity onPress={() => goBack()}><Ionicons name="ios-arrow-back" size={27} color="#52575D"style={{marginTop: 12, marginLeft : 16, marginBottom : 12, color : '#3E51B5'}}></Ionicons></TouchableOpacity>
+            </View>
             <Image style={styles.avatar} source={{uri: `http://52.90.6.74:2000/myhire/file/${this.state.MyProfile.photo}`}}/>
             <View style={styles.body}>
               <View style={styles.bodyContent}>
@@ -59,7 +63,7 @@ class Preview extends Component {
                 <Text style={styles.info}>Expert on : {this.state.MyProfile.skill}</Text>
                 <Text style={styles.description}> <Text style={styles.info}>{this.state.MyProfile.description}</Text></Text>
                            
-                <TouchableOpacity  onPress={() => this.props.navigation.navigate('Hire')} style={styles.buttonContainer}>
+                <TouchableOpacity  style={{color : ''}}onPress={() => this.props.navigation.navigate('Hire')} style={styles.buttonContainer}>
                   <Text style={{color : 'white', fontSize : 18}}>Hire Me</Text> 
                 </TouchableOpacity>
               </View>
@@ -126,7 +130,7 @@ const styles = StyleSheet.create({
       marginBottom:20,
       width:150,
       borderRadius:30,
-      backgroundColor: "blue",
+      backgroundColor: "#3E51B5",
     },
   });
   const mapStateToProps = (state) => {
