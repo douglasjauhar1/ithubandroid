@@ -28,7 +28,7 @@ export default App = () => {
 
     <Provider store={store}>
       <PersistGate 
-        loading={<Text> LOLOLOL </Text>}
+        loading={<Text> Loading Please Wait ... </Text>}
         persistor={persistor}
       >
         <AppContainer />

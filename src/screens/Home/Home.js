@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
 import { Image, ScrollView, View, StyleSheet} from 'react-native';
-import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right, Tabs, Tab } from 'native-base';
+import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right, Tabs, Tab , Footer, FooterTab} from 'native-base';
+//Uy Ini bross yang penting
+import {connect} from 'react-redux'
+import Axios from 'axios'
+import {login} from '../../../redux/actions/authActions';
+import {increaseCounter, decreaseCounter} from '../../../redux/actions/counterActions'
+import {jwt} from '../../../redux/actions/tokenAction'
+import {getEngineer} from '../../../redux/actions/engineerActions'
+import {role} from '../../../redux/actions/categoryAction'
+
+
 export default class Home extends Component {
     constructor(){
         super();
-        //mengirimkan state ke bagian render 
-        //props itu berbentuk objek
         this.state = {
-          items : []
+          items : [],
+        
         };
       
       }
@@ -15,7 +24,7 @@ export default class Home extends Component {
       componentDidMount(){
       
        
-       fetch('http://52.90.6.74:2000/engineer/read')
+       fetch('http://192.168.1.20:5000/engineer/read')
        .then(response => response.json())
        .then(data => this.setState({ items : data }))
    
@@ -24,6 +33,15 @@ export default class Home extends Component {
 
   render() {
     const {items} = this.state
+    const {data, isLoading} = this.state;
+    console.log(this.props.category);
+    
+    
+    if(isLoading){
+        return(
+            <ActivityIndicator size='large' style={{flex: 1, backgroundColor: '#f5f5f5', opacity: 0.5}} color='#e74c3c' />
+        )
+    }  
     return (
         <Container>
           <View style={{height : 220}}>
@@ -65,11 +83,13 @@ export default class Home extends Component {
              <View key ={index} >
           <Card style={styles.card}>
            
-              <Image source={{uri : `http://52.90.6.74:2000/myhire/file/${item.photo}`  }} style={{height: 180, width: null, flex: 1, borderTopRightRadius : 10, borderTopLeftRadius : 10}}/>
+              <Image source={{uri : `http://192.168.1.20:5000/myhire/file/${item.photo}`  }} style={{height: 180, width: null, flex: 1, borderTopRightRadius : 10, borderTopLeftRadius : 10}}/>
            
             <Body>
                   <Text>{item.name}</Text>
                   <Text>{item.profession}</Text>
+                  <Text>{item.done}</Text>
+                  
                 </Body>
           </Card>
          
@@ -78,7 +98,36 @@ export default class Home extends Component {
              )}
           </ScrollView>
         </Content>
+      
+        <Footer>
+          <FooterTab>
+            <Button vertical onPress={() => this.props.navigation.navigate('Home')}>
+              <Icon name="home" />
+              <Text>Home</Text>
+            </Button>
+            <Button vertical onPress={() => this.props.navigation.navigate('Pageengineer')}>
+              <Icon name="people" />
+              <Text>Engineer</Text>
+            </Button>
+            <Button  onPress={() =>{
+                  (this.props.category)?
+                  this.props.navigation.navigate('Engineerproject'):
+                  this.props.navigation.navigate('Pageproject');
+                  console.log(this.props.category);
+                  
+                 } 
+                } vertical active>
+              <Icon active name="business" />
+              <Text>Project</Text>
+            </Button>
+            <Button vertical>
+              <Icon name="person" onPress={() => this.props.navigation.navigate('Profile')}/>
+              <Text>Profile</Text>
+            </Button>
+          </FooterTab>
+        </Footer>
       </Container>
+
     );
   }
 }
@@ -116,3 +165,4 @@ const styles = StyleSheet.create({
      
     }
 })
+

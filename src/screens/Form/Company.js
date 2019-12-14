@@ -12,13 +12,13 @@ export default class Company extends Component {
     return (
       <Container>
         <Content contentContainerStyle={{justifyContent : 'center', alignItems : 'center', flex : 1}}>
-         <Text style={styles.head}>Company Form</Text>
+         <Text style={styles.head}>Project Form</Text>
           <Item stackedLabel  style={styles.Input}>
           <Label>Name</Label>
             <Input/>
           </Item> 
           <Item stackedLabel  style={styles.Input}>
-          <Label>Email</Label>
+          <Label>Price</Label>
             <Input/>
           </Item> 
          

@@ -2,11 +2,12 @@ import Axios from 'axios'
 //import Redux
 import {connect} from 'react-redux'
 //Redux Act
-import {login} from '../../redux/actions/authActions'
-import {increaseCounter, decreaseCounter} from '../../redux/actions/counterActions'
 
-import { getEngineer } from '../../redux/actions/engineerActions'
-import { jwt } from '../../redux/actions/tokenAction'
+import {login} from '../../redux/actions/authActions';
+import {increaseCounter, decreaseCounter} from '../../redux/actions/counterActions'
+import {jwt} from '../../redux/actions/tokenAction'
+import {getEngineer} from '../../redux/actions/engineerActions'
+import {role} from '../../redux/actions/categoryAction'
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import React, { Component } from 'react';
@@ -20,7 +21,7 @@ class Login extends Component {
   _sendLogin = async () => {
     console.log(this.state.username)
        try{
-      const auth = await Axios.post('http://52.90.6.74:2000/myhire/login',
+      const auth = await Axios.post('http://192.168.1.20:5000/myhire/login',
       {
         username : this.state.username,
         password : this.state.password
@@ -28,9 +29,12 @@ class Login extends Component {
       )
       await console.log(this.props.token)
       Axios.defaults.headers.common['Authorization'] = auth.data.result.token;
-             await this.props.reduxLogin(true)
-             await this.props.reduxToken(auth.data.result.token)
-             await this.props.navigation.navigate('Home')
+      await console.log(this.props.token);
+      Axios.defaults.headers.common['Authorization'] = auth.data.result.token;
+       await this.props.reduxLogin(true)
+       await this.props.reduxCategory(auth.data.result.category)
+       await this.props.reduxToken(auth.data.result.token)
+             await this.props.navigation.navigate('Pageengineer')
     }catch(error){
       console.log(error)
     }
@@ -45,12 +49,12 @@ class Login extends Component {
         style={styles.logo}/>
          <Text style={styles.head}>Login Page</Text>
           <Item rounded style={styles.Input}>
-            <Icon active name='home' />
+            <Icon active name='person' />
             <Input placeholder='Username' onChangeText={value => this.setState({username : value})}/>
           </Item> 
           <Item rounded style={styles.Input}>
             <Icon active name='key' />
-            <Input placeholder='Password' onChangeText={value => this.setState({password : value})}/>
+            <Input placeholder='Password' secureTextEntry={true} onChangeText={value => this.setState({password : value})}/>
           </Item> 
          
           <Button onPress={this._sendLogin}rounded style={styles.btn}>
@@ -96,31 +100,34 @@ const styles = StyleSheet.create({
 
 // Map State To Props (Redux Store Passes State To Component)
 const mapStateToProps = (state) => {
-    // Redux Store --> Component
-    return {
-      counter: state.counterReducer.counter,
-      loggedIn: state.authReducer.loggedIn,
-      token: state.tokenReducer.token,
-      engineerList: state
-    };
+  // Redux Store --> Component
+  return {
+    counter: state.counterReducer.counter,
+    loggedIn: state.authReducer.loggedIn,
+    token: state.tokenReducer.token,
+    id: state.engineerReducer.id,
+    category: state.categoryReducer.category
   };
-  
-  // Map Dispatch To Props (Dispatch Actions To Reducers. Reducers Then Modify The Data And Assign It To Your Props)
-  const mapDispatchToProps = (dispatch) => {
-    // Action
-      return {
-        // Increase Counter
-        reduxIncreaseCounter: () => dispatch(increaseCounter()),
-        // Decrease Counter
-        reduxDecreaseCounter: () => dispatch(decreaseCounter()),
-        // Login
-        reduxLogin: (trueFalse) => dispatch(login(trueFalse)),
+};
 
-        reduxToken: (token) => dispatch(jwt(token)),
-  
-        reduxEngineer: () => dispatch(getEngineer())
-     };
-  };
-  
-  // Exports
-  export default connect(mapStateToProps, mapDispatchToProps)(Login);
+// Map Dispatch To Props (Dispatch Actions To Reducers. Reducers Then Modify The Data And Assign It To Your Props)
+const mapDispatchToProps = (dispatch) => {
+  // Action
+    return {
+      // Increase Counter
+      reduxIncreaseCounter: () => dispatch(increaseCounter()),
+      // Decrease Counter
+      reduxDecreaseCounter: () => dispatch(decreaseCounter()),
+      // Login
+      reduxLogin: (trueFalse) => dispatch(login(trueFalse)),
+
+      reduxToken: (token) => dispatch(jwt(token)),
+
+      reduxEngineer: () => dispatch(getEngineer()),
+
+      reduxCategory: (category) => dispatch(role(category)),
+   };
+};
+
+// Exports
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
